@@ -1,0 +1,123 @@
+version: "3.9"
+services:
+  # elasticsearch:
+  #     image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+  #     container_name: elasticsearch
+  #     ports:
+  #         - "9200:9200"
+  #         - "9300:9300"
+  #     networks:
+  #         - backend
+  #     environment:
+  #       ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+  #       discovery.type: single-node
+  # kibana:
+  #     image: docker.elastic.co/kibana/kibana:7.16.1
+  #     container_name: kibana
+  #     ports:
+  #         - "5601:5601"
+  #     networks:
+  #         - backend
+  #     environment:
+  #         - ELASTICSEARCH_URL=http://elasticsearch:9200
+  #     depends_on:
+  #         - elasticsearch
+
+  # rabbitmq:
+  #     image: rabbitmq:3-management
+  #     container_name: rabbitmq
+  #     ports:
+  #         - "5672:5672"
+  #         - "15672:15672"
+  #     volumes:
+  #       - orcamento-volume:/var/lib/rabbitmq
+  #     networks:
+  #       - backend
+
+  pg9:
+    image: postgres:9
+    container_name: pg9
+    environment:
+      - POSTGRES_USER=srec
+      - POSTGRES_PASSWORD=tribrecsj
+      - POSTGRES_DB=tributario
+    ports:
+      - "5105:5432"
+    volumes:
+      - tributario-volume:/var/lib/postgresql/data
+      - ./dump-tributario-202309201238.sql:/docker-entrypoint-initdb.d/dummy_dump.sql
+    networks:
+      - backend
+
+  pg10:
+    image: postgres:10.5
+    container_name: pg10
+    environment:
+      - POSTGRES_USER=orcamento
+      - POSTGRES_PASSWORD=orcamento
+      - POSTGRES_DB=orcamento
+    ports:
+      - "5961:5432"
+    # expose:
+    #   - '5433'
+    volumes:
+      - orcamento-volume:/var/lib/postgresql/data
+    networks:
+      - backend
+  pg11:
+    image: postgres:10.5
+    container_name: pg11
+    environment:
+      - POSTGRES_USER=sjfFj31@ks!#_jk098s
+      - POSTGRES_PASSWORD=f3890@#jJS8F9sw_*j
+      - POSTGRES_DB=tLDxDfwAf
+    ports:
+      - "5957:5432"
+    # expose:
+    #   - '5433'
+    volumes:
+      - xlpseg-volume:/var/lib/postgresql/data
+    networks:
+      - backend
+  # mysql:
+  #     image: mysql:5.7
+  #     restart: always
+  #     environment:
+  #       MYSQL_DATABASE: 'orcamento'
+  #       MYSQL_USER: 'orc'
+  #       MYSQL_PASSWORD: 'orc748'
+  #       # Password for root access
+  #       MYSQL_ROOT_PASSWORD: 'orc748'
+  #     ports:
+  #       - '3306:3306'
+  #     expose:
+  #       - '3306'
+  #     volumes:
+  #       - mysql-volume:/var/lib/mysql
+  #     networks:
+  #       - backend
+#     keycloak:
+#         image: quay.io/keycloak/keycloak:14.0.0
+#         container_name: keycloak
+#         environment:
+#           DB_VENDOR: POSTGRES
+#           DB_ADDR: postgres
+#           DB_DATABASE: orcamento
+#           DB_USER: postgres
+#           DB_PASSWORD: postgres
+#           DB_SCHEMA: public
+#           KEYCLOAK_USER: admin
+#           KEYCLOAK_PASSWORD: ad1235
+#         ports:
+#           - "8080:8080"
+#         depends_on:
+#           - postgres
+#         networks:
+#           - backend
+volumes:
+  tributario-volume:
+  orcamento-volume:
+  xlpseg-volume:
+  # mysql-volume:
+networks:
+  backend:
